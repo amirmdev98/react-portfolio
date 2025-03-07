@@ -205,16 +205,4 @@ const Main = styled.main`
   padding-top: 80px; /* Header height */
 `;
 
-const CenteredSection = styled.section`
-  min-height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-
 export default App;
