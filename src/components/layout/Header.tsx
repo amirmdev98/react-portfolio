@@ -43,6 +43,7 @@ const Header = () => {
             as={motion.button}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
+            aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
           >
             {isDark ? <FaSun size={18} /> : <FaMoon size={18} />}
           </ThemeToggle>
@@ -103,21 +104,10 @@ const NavItem = styled.button<NavItemProps>`
   font-size: 1rem;
   cursor: pointer;
   position: relative;
+  transition: color 0.3s ease;
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: ${({ theme }) => theme.accent.primary};
-    transform: scaleX(${({ $isActive }) => ($isActive ? 1 : 0)});
-    transition: transform 0.3s ease;
-  }
-
-  &:hover::after {
-    transform: scaleX(1);
+  &:hover {
+    color: ${({ theme }) => theme.accent.primary};
   }
 `;
 

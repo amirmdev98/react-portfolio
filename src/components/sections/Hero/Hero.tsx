@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { fadeInUpVariants, slideInLeftVariants, slideInRightVariants } from '../../../hooks/useInView';
+import { fadeInUpVariants, slideInLeftVariants } from '../../../hooks/useInView';
 import { AnimatedSection } from '../../common/AnimatedSection';
 
 const HeroSection = styled(AnimatedSection)`
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  padding-top: 2rem;
   position: relative;
   overflow: hidden;
 `;
@@ -16,20 +16,22 @@ const HeroSection = styled(AnimatedSection)`
 const Container = styled.div`
   max-width: 1200px;
   width: 100%;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
 `;
 
 const Content = styled.div`
-  z-index: 1;
+  width: 100%;
+  text-align: center;
+  padding: 0 2rem;
+`;
+
+const MainContent = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 `;
 
 const Greeting = styled(motion.span)`
@@ -42,7 +44,7 @@ const Greeting = styled(motion.span)`
 const Title = styled(motion.h1)`
   font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1.2;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: ${({ theme }) => theme.text.primary};
 `;
 
@@ -51,15 +53,13 @@ const Subtitle = styled(motion.p)`
   line-height: 1.6;
   color: ${({ theme }) => theme.text.secondary};
   margin-bottom: 2rem;
+  max-width: 600px;
 `;
 
 const CTA = styled(motion.div)`
   display: flex;
   gap: 1rem;
-  
-  @media (max-width: 768px) {
-    justify-content: center;
-  }
+  justify-content: center;
 `;
 
 const PrimaryButton = styled(motion.a)`
@@ -80,24 +80,6 @@ const SecondaryButton = styled(PrimaryButton)`
   background: transparent;
   border: 2px solid ${({ theme }) => theme.accent.primary};
   color: ${({ theme }) => theme.accent.primary};
-`;
-
-const ImageContainer = styled(motion.div)`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 400px;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const HeroImage = styled(motion.img)`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 20px;
 `;
 
 const BackgroundShape = styled(motion.div)`
@@ -122,62 +104,52 @@ const Hero = () => {
       />
       <Container>
         <Content>
-          <Greeting
-            variants={fadeInUpVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            👋 Hi there, I'm
-          </Greeting>
-          <Title
-            variants={slideInLeftVariants}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 0.2 }}
-          >
-            Your Name
-          </Title>
-          <Subtitle
-            variants={slideInLeftVariants}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 0.3 }}
-          >
-            A passionate Full-Stack Developer crafting beautiful and functional web experiences
-          </Subtitle>
-          <CTA>
-            <PrimaryButton
-              href="#contact"
+          <MainContent>
+            <Greeting
               variants={fadeInUpVariants}
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.4 }}
             >
-              Get in Touch
-            </PrimaryButton>
-            <SecondaryButton
-              href="#projects"
-              variants={fadeInUpVariants}
+              Hi, I'm
+            </Greeting>
+            <Title
+              variants={slideInLeftVariants}
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.2 }}
             >
-              View Projects
-            </SecondaryButton>
-          </CTA>
+              Amir Mohammadi
+            </Title>
+            <Subtitle
+              variants={slideInLeftVariants}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: 0.3 }}
+            >
+              A Full Stack Developer crafting beautiful and functional web experiences
+            </Subtitle>
+            <CTA>
+              <PrimaryButton
+                href="#contact"
+                variants={fadeInUpVariants}
+                initial="hidden"
+                animate="visible"
+                transition={{ delay: 0.4 }}
+              >
+                Contact Me
+              </PrimaryButton>
+              <SecondaryButton
+                href="#projects"
+                variants={fadeInUpVariants}
+                initial="hidden"
+                animate="visible"
+                transition={{ delay: 0.5 }}
+              >
+                View Projects
+              </SecondaryButton>
+            </CTA>
+          </MainContent>
         </Content>
-        <ImageContainer
-          variants={slideInRightVariants}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.3 }}
-        >
-          <HeroImage
-            src="/hero-image.jpg"
-            alt="Hero"
-            loading="eager"
-          />
-        </ImageContainer>
       </Container>
     </HeroSection>
   );
