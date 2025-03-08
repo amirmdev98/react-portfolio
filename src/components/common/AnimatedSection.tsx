@@ -1,9 +1,9 @@
-import { ReactNode, HTMLAttributes } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, HTMLMotionProps } from 'framer-motion';
 import { useAnimatedInView } from '../../hooks/useInView';
 
-interface AnimatedSectionProps extends HTMLAttributes<HTMLElement> {
+interface AnimatedSectionProps extends Omit<HTMLMotionProps<"section">, "ref"> {
   children: ReactNode;
   variants?: Variants;
   className?: string;
