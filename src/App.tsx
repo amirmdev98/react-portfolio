@@ -1,13 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { RiTerminalBoxLine } from "react-icons/ri";
 import { FaMoon, FaSun } from "react-icons/fa";
-import Hero from "./components/Sections/Hero";
-import Skills from "./components/Sections/Skills";
-import Projects from "./components/Sections/Projects";
-import Contact from "./components/Sections/Contact";
+import { HelmetProvider } from 'react-helmet-async';
 import { ThemeWrapper, useTheme } from "./styles/ThemeProvider";
+import { GlobalStyles } from "./styles/GlobalStyles.tsx";
+import { SEO } from "./components/common/SEO";
+import { LoadingSpinner } from "./components/common/LoadingSpinner";
+import { ErrorBoundary } from "./components/common/ErrorBoundary";
+import MainLayout from "./components/layout/MainLayout";
+
+// Lazy load components
+const Hero = lazy(() => import("./components/sections/Hero"));
+const Skills = lazy(() => import("./components/sections/Skills"));
+const Projects = lazy(() => import("./components/sections/Projects"));
+const Blog = lazy(() => import("./components/sections/Blog/Blog"));
+const Contact = lazy(() => import("./components/sections/Contact"));
 
 // Animation variants
 const hoverScale = {
@@ -22,7 +31,7 @@ const AppContent = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "skills", "projects", "contact"];
+      const sections = ["home", "skills", "projects", "blog", "contact"];
       const current = sections.find((section) => {
         const element = document.getElementById(section);
         if (element) {
@@ -46,8 +55,17 @@ const AppContent = () => {
     document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Prevent transitions on page load
+  useEffect(() => {
+    document.body.classList.add("preload");
+    const timeoutId = setTimeout(() => {
+      document.body.classList.remove("preload");
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   return (
-    <Layout>
+    <MainLayout>
       <Background>
         <GlowingOrb />
       </Background>
@@ -64,6 +82,7 @@ const AppContent = () => {
               { id: "home", label: "Home" },
               { id: "skills", label: "Skills" },
               { id: "projects", label: "Projects" },
+              { id: "blog", label: "Blog" },
               { id: "contact", label: "Contact" },
             ].map((item) => (
               <NavItem
@@ -86,25 +105,29 @@ const AppContent = () => {
       </Header>
 
       <Main>
-        <Hero />
-        <Skills />
-        <Projects />
-        <Contact />
+        <Suspense fallback={<LoadingSpinner />}>
+          <Hero />
+          <Skills />
+          <Projects />
+          <Blog />
+          <Contact />
+        </Suspense>
       </Main>
-    </Layout>
+    </MainLayout>
   );
 };
 
 const App = () => (
-  <ThemeWrapper>
-    <AppContent />
-  </ThemeWrapper>
+  <ErrorBoundary>
+    <HelmetProvider>
+      <ThemeWrapper>
+        <SEO />
+        <GlobalStyles />
+        <AppContent />
+      </ThemeWrapper>
+    </HelmetProvider>
+  </ErrorBoundary>
 );
-
-const Layout = styled.div`
-  position: relative;
-  min-height: 100vh;
-`;
 
 const Background = styled.div`
   position: fixed;
