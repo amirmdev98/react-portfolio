@@ -2,14 +2,15 @@ import { useState, useEffect, Suspense, lazy } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { RiTerminalBoxLine } from "react-icons/ri";
-import { FaMoon, FaSun } from "react-icons/fa";
 import { HelmetProvider } from 'react-helmet-async';
-import { ThemeWrapper, useTheme } from "./styles/ThemeProvider";
+import { ThemeWrapper } from "./styles/ThemeProvider";
 import { GlobalStyles } from "./styles/GlobalStyles.tsx";
 import { SEO } from "./components/common/SEO";
 import { LoadingSpinner } from "./components/common/LoadingSpinner";
 import { ErrorBoundary } from "./components/common/ErrorBoundary";
 import MainLayout from "./components/layout/MainLayout";
+import MobileNav from "./components/common/MobileNav";
+import BackToTop from "./components/common/BackToTop";
 
 // Lazy load components
 const Hero = lazy(() => import("./components/sections/Hero"));
@@ -26,8 +27,6 @@ const hoverScale = {
 
 const AppContent = () => {
   const [activeSection, setActiveSection] = useState("home");
-  const { theme, toggleTheme } = useTheme();
-  const isDark = theme.name === "dark";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,7 +76,7 @@ const AppContent = () => {
             <BrandName>AMD</BrandName>
           </Brand>
 
-          <Navigation>
+          <DesktopNavigation>
             {[
               { id: "home", label: "Home" },
               { id: "skills", label: "Skills" },
@@ -97,10 +96,11 @@ const AppContent = () => {
                 {item.label}
               </NavItem>
             ))}
-            <ThemeToggle onClick={toggleTheme}>
-              {isDark ? <FaSun size={18} /> : <FaMoon size={18} />}
-            </ThemeToggle>
-          </Navigation>
+          </DesktopNavigation>
+          
+          <MobileNavContainer>
+            <MobileNav activeSection={activeSection} onNavClick={handleNavClick} />
+          </MobileNavContainer>
         </HeaderContent>
       </Header>
 
@@ -113,6 +113,7 @@ const AppContent = () => {
           <Contact />
         </Suspense>
       </Main>
+      <BackToTop />
     </MainLayout>
   );
 };
@@ -186,9 +187,23 @@ const BrandName = styled.span`
   -webkit-text-fill-color: transparent;
 `;
 
-const Navigation = styled.nav`
+const DesktopNavigation = styled.nav`
   display: flex;
   gap: 1.5rem;
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileNavContainer = styled.div`
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  
+  @media (max-width: 768px) {
+    display: flex;
+  }
 `;
 
 const NavItem = styled(motion.button)<{ $isActive: boolean }>`
@@ -215,13 +230,6 @@ const NavItem = styled(motion.button)<{ $isActive: boolean }>`
   &:hover::after {
     width: 100%;
   }
-`;
-
-const ThemeToggle = styled.button`
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: ${({ theme }) => theme.accent.primary};
 `;
 
 const Main = styled.main`

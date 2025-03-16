@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
+import { navItems } from '../configs/personalInfo';
 
-type Section = 'home' | 'skills' | 'projects' | 'contact';
+// Extract section names from navItems for typesafety
+type Section = typeof navItems[number]['to'];
 
 export const useNavigation = () => {
   const [activeSection, setActiveSection] = useState<Section>('home');
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections: Section[] = ['home', 'skills', 'projects', 'contact'];
+      const sections = navItems.map(item => item.to);
       const current = sections.find((section) => {
         const element = document.getElementById(section);
         if (element) {
@@ -15,7 +17,7 @@ export const useNavigation = () => {
           return rect.top <= 100 && rect.bottom >= 100;
         }
         return false;
-      });
+      }) as Section | undefined;
 
       if (current) {
         setActiveSection(current);

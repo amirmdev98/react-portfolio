@@ -10,4 +10,17 @@ export interface BlogPost {
   slug: string;
 }
 
-export type BlogCategory = 'all' | 'tech' | 'development' | 'career' | 'tutorial';
+export type BlogCategory = 
+  | 'all' 
+  | 'tech' 
+  | 'development' 
+  | 'career' 
+  | 'tutorial' 
+  | 'React' 
+  | 'TypeScript' 
+  | 'Development' 
+  | 'Frontend' 
+  | 'Performance' 
+  | 'Web3' 
+  | 'AI' 
+  | 'Career';

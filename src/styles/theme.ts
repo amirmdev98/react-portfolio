@@ -22,26 +22,3 @@ export const darkTheme: DefaultTheme = {
   },
   name: 'dark'
 };
-
-export const lightTheme: DefaultTheme = {
-  background: {
-    primary: '#FFFFFF',
-    secondary: '#F5F5F7',
-    card: '#FFFFFF',
-  },
-  accent: {
-    primary: '#007AFF',    // Blue
-    secondary: '#FF3366',   // Pink
-    tertiary: '#5856D6',   // Purple
-  },
-  text: {
-    primary: '#000000',
-    secondary: '#666666',
-    accent: '#007AFF',
-  },
-  gradient: {
-    primary: 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)',
-    glow: 'linear-gradient(180deg, rgba(0, 122, 255, 0.15) 0%, rgba(0, 122, 255, 0) 100%)',
-  },
-  name: 'light'
-};

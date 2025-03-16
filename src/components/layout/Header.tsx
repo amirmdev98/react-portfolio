@@ -1,36 +1,29 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { RiTerminalBoxLine } from 'react-icons/ri';
-import { FaMoon, FaSun } from 'react-icons/fa';
-import { useTheme } from '../../styles/ThemeProvider';
-import { useNavigation, Section } from '../../hooks/useNavigation';
+import { useNavigation } from '../../hooks/useNavigation';
+import { navItems } from '../../configs/personalInfo';
+
+interface NavItem {
+  to: string;
+  label: string;
+}
 
 const Header = () => {
-  const { theme, toggleTheme } = useTheme();
   const { activeSection, scrollToSection } = useNavigation();
-  const isDark = theme.name === 'dark';
-
-  const navigationItems: { id: Section; label: string }[] = [
-    { id: 'home', label: 'Home' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'contact', label: 'Contact' },
-  ];
 
   return (
     <HeaderContainer>
       <HeaderContent>
-        <Brand>
-          <RiTerminalBoxLine size={24} />
-          <BrandName>AMD</BrandName>
+        <Brand onClick={() => scrollToSection('home')}>
+          <BrandName>Portfolio</BrandName>
         </Brand>
 
         <Navigation>
-          {navigationItems.map((item) => (
+          {navItems.map((item: NavItem) => (
             <NavItem
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              $isActive={activeSection === item.id}
+              key={item.to}
+              onClick={() => scrollToSection(item.to)}
+              active={activeSection === item.to}
               as={motion.button}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -38,15 +31,6 @@ const Header = () => {
               {item.label}
             </NavItem>
           ))}
-          <ThemeToggle
-            onClick={toggleTheme}
-            as={motion.button}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-          >
-            {isDark ? <FaSun size={18} /> : <FaMoon size={18} />}
-          </ThemeToggle>
         </Navigation>
       </HeaderContent>
     </HeaderContainer>
@@ -92,15 +76,15 @@ const Navigation = styled.nav`
 `;
 
 interface NavItemProps {
-  $isActive: boolean;
+  active: boolean;
 }
 
 const NavItem = styled.button<NavItemProps>`
   background: none;
   border: none;
   padding: 0.5rem;
-  color: ${({ theme, $isActive }) =>
-    $isActive ? theme.accent.primary : theme.text.primary};
+  color: ${({ theme, active }) =>
+    active ? theme.accent.primary : theme.text.primary};
   font-size: 1rem;
   cursor: pointer;
   position: relative;
@@ -109,17 +93,6 @@ const NavItem = styled.button<NavItemProps>`
   &:hover {
     color: ${({ theme }) => theme.accent.primary};
   }
-`;
-
-const ThemeToggle = styled.button`
-  background: none;
-  border: none;
-  padding: 0.5rem;
-  color: ${({ theme }) => theme.text.primary};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 export default Header;

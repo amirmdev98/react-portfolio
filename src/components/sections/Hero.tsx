@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { Section } from "../../styles/SharedStyles";
+import { contactInfo, personalDetails } from "../../configs/personalInfo";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,6 +26,154 @@ const itemVariants = {
 
 const Hero = () => (
   <HeroSection id="home">
+    {/* Advanced background elements */}
+    <BackgroundPattern />
+    <BackgroundOverlay />
+    
+    {/* Floating Elements */}
+    <FloatingElement 
+      as={motion.div}
+      size="80px"
+      top="15%"
+      left="10%"
+      color="primary"
+      animate={{ 
+        y: [0, -15, 0],
+        rotate: [0, 5, 0],
+        opacity: [0.4, 0.6, 0.4],
+      }}
+      transition={{ 
+        duration: 6,
+        repeat: Infinity,
+        repeatType: "reverse"
+      }}
+    />
+    
+    <FloatingElement 
+      as={motion.div}
+      size="120px"
+      top="70%"
+      right="15%"
+      color="secondary"
+      animate={{ 
+        y: [0, 20, 0],
+        rotate: [0, -8, 0],
+        opacity: [0.3, 0.5, 0.3],
+      }}
+      transition={{ 
+        duration: 8,
+        repeat: Infinity,
+        repeatType: "reverse"
+      }}
+    />
+    
+    <FloatingElement 
+      as={motion.div}
+      size="60px"
+      bottom="15%"
+      left="20%"
+      color="primary"
+      animate={{ 
+        y: [0, 10, 0],
+        x: [0, 5, 0],
+        opacity: [0.2, 0.4, 0.2],
+      }}
+      transition={{ 
+        duration: 7,
+        repeat: Infinity,
+        repeatType: "reverse"
+      }}
+    />
+    
+    <BackgroundCircle 
+      as={motion.div}
+      animate={{ 
+        scale: [1, 1.05, 1],
+        opacity: [0.3, 0.4, 0.3],
+      }}
+      transition={{ 
+        duration: 8, 
+        repeat: Infinity,
+        repeatType: "reverse" 
+      }}
+    />
+    
+    <BackgroundCircleSmall
+      as={motion.div}
+      animate={{ 
+        scale: [1, 1.1, 1],
+        opacity: [0.2, 0.3, 0.2],
+        x: [0, 10, 0],
+        y: [0, -10, 0]
+      }}
+      transition={{ 
+        duration: 10, 
+        repeat: Infinity,
+        repeatType: "reverse" 
+      }}
+    />
+    
+    {/* Floating code symbols */}
+    <CodeSymbol 
+      as={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ 
+        opacity: [0, 1, 0],
+        y: [-20, 0, -20],
+        rotate: [0, 5, 0]
+      }}
+      transition={{
+        duration: 5,
+        repeat: Infinity,
+        delay: 1,
+        repeatType: "loop"
+      }}
+      top="20%"
+      right="25%"
+    >
+      &lt;/&gt;
+    </CodeSymbol>
+    
+    <CodeSymbol 
+      as={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ 
+        opacity: [0, 1, 0],
+        y: [0, -15, 0],
+        rotate: [-5, 0, -5]
+      }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+        delay: 2,
+        repeatType: "loop"
+      }}
+      bottom="30%"
+      right="10%"
+    >
+      { }
+    </CodeSymbol>
+    
+    <CodeSymbol 
+      as={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ 
+        opacity: [0, 1, 0],
+        y: [0, 10, 0],
+        rotate: [0, -3, 0]
+      }}
+      transition={{
+        duration: 6,
+        repeat: Infinity,
+        delay: 3,
+        repeatType: "loop"
+      }}
+      top="35%"
+      left="10%"
+    >
+      ( )
+    </CodeSymbol>
+    
     <ContentWrapper
       as={motion.div}
       variants={containerVariants}
@@ -32,39 +181,62 @@ const Hero = () => (
       animate="visible"
     >
       <Introduction as={motion.div} variants={itemVariants}>
+        <ImageContainer>
+          <HeroImage 
+            src={personalDetails.profileImage}
+            alt={personalDetails.fullName}
+            as={motion.img}
+            whileHover={{ scale: 1.05, boxShadow: '0 0 25px rgba(129, 47, 255, 0.6)' }}
+          />
+        </ImageContainer>
         <Greeting>Hello, I'm</Greeting>
-        <Name>Amir Mohamad Davoodi</Name>
-        <Title>Full Stack Developer</Title>
+        <Name>{personalDetails.fullName}</Name>
+        <Title>{personalDetails.title}</Title>
         <Description>
-          Passionate about building exceptional digital experiences with modern
-          technologies. Specialized in React, Node.js, and cloud solutions.
+          {personalDetails.bio}
         </Description>
       </Introduction>
 
       <CallToAction as={motion.div} variants={itemVariants}>
         <SocialLinks>
           <SocialLink
-            href="https://github.com/amirdavoodi98"
+            href={contactInfo.github.url}
             target="_blank"
             rel="noopener noreferrer"
+            as={motion.a}
+            whileHover={{ scale: 1.2, y: -5 }}
+            whileTap={{ scale: 0.9 }}
           >
             <FaGithub size={24} />
           </SocialLink>
           <SocialLink
-            href="https://linkedin.com/in/amirmohamad-davoodi"
+            href={contactInfo.linkedin.url}
             target="_blank"
             rel="noopener noreferrer"
+            as={motion.a}
+            whileHover={{ scale: 1.2, y: -5 }}
+            whileTap={{ scale: 0.9 }}
           >
             <FaLinkedin size={24} />
           </SocialLink>
           <SocialLink
-            href="mailto:amirm.dev8@gmail.com"
+            href={`mailto:${contactInfo.email}`}
             rel="noopener noreferrer"
+            as={motion.a}
+            whileHover={{ scale: 1.2, y: -5 }}
+            whileTap={{ scale: 0.9 }}
           >
             <FaEnvelope size={24} />
           </SocialLink>
         </SocialLinks>
-        <CTAButton href="#contact">Get In Touch</CTAButton>
+        <CTAButton 
+          href="#contact"
+          as={motion.a}
+          whileHover={{ scale: 1.05, y: -3 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Get In Touch
+        </CTAButton>
       </CallToAction>
     </ContentWrapper>
   </HeroSection>
@@ -80,6 +252,33 @@ const HeroSection = styled(Section)`
   padding-top: 60px;
 `;
 
+const BackgroundPattern = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 25% 25%, ${({ theme }) => theme.accent.primary}20 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, ${({ theme }) => theme.accent.secondary}25 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, ${({ theme }) => theme.accent.primary}15 0%, transparent 40%),
+    radial-gradient(circle at 100% 0%, ${({ theme }) => theme.accent.secondary}15 0%, transparent 40%),
+    linear-gradient(45deg, ${({ theme }) => theme.background.card}80 0%, ${({ theme }) => theme.background.primary} 100%);
+  z-index: 0;
+  opacity: 0.9;
+`;
+
+const BackgroundOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: ${({ theme }) => theme.background.primary}40;
+  backdrop-filter: blur(5px);
+  z-index: 0;
+`;
+
 const ContentWrapper = styled.div`
   max-width: 1000px;
   width: 100%;
@@ -92,6 +291,22 @@ const ContentWrapper = styled.div`
 
 const Introduction = styled.div`
   text-align: center;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+`;
+
+const HeroImage = styled.img`
+  width: clamp(180px, 25vw, 280px);
+  height: clamp(180px, 25vw, 280px);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid ${({ theme }) => theme.accent.primary};
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 `;
 
 const Greeting = styled.h3`
@@ -149,17 +364,112 @@ const SocialLink = styled.a`
 
 const CTAButton = styled.a`
   background: ${({ theme }) => theme.gradient.primary};
-  color: ${({ theme }) => theme.text.primary};
+  color: white;
   padding: 1rem 2rem;
   border-radius: 50px;
   font-weight: 600;
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.7s ease;
   }
+  
+  &:hover::before {
+    left: 100%;
+  }
+`;
+
+const BackgroundCircle = styled.div`
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.accent.primary}10,
+    ${({ theme }) => theme.accent.secondary}20
+  );
+  bottom: -250px;
+  right: -100px;
+  z-index: 0;
+  filter: blur(50px);
+`;
+
+const BackgroundCircleSmall = styled.div`
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: linear-gradient(
+    45deg,
+    ${({ theme }) => theme.accent.secondary}10,
+    ${({ theme }) => theme.accent.primary}15
+  );
+  top: -50px;
+  left: -150px;
+  z-index: 0;
+  filter: blur(40px);
+`;
+
+interface FloatingElementProps {
+  size: string;
+  top?: string;
+  right?: string;
+  bottom?: string;
+  left?: string;
+  color: 'primary' | 'secondary';
+}
+
+const FloatingElement = styled(motion.div)<FloatingElementProps>`
+  position: absolute;
+  width: ${props => props.size};
+  height: ${props => props.size};
+  border-radius: 50%;
+  background: ${({ theme, color }) => 
+    color === 'primary' 
+      ? theme.accent.primary 
+      : theme.accent.secondary}30;
+  filter: blur(20px);
+  z-index: 0;
+  ${props => props.top && `top: ${props.top};`}
+  ${props => props.right && `right: ${props.right};`}
+  ${props => props.bottom && `bottom: ${props.bottom};`}
+  ${props => props.left && `left: ${props.left};`}
+`;
+
+interface CodeSymbolProps {
+  top?: string;
+  right?: string;
+  bottom?: string;
+  left?: string;
+}
+
+const CodeSymbol = styled(motion.div)<CodeSymbolProps>`
+  position: absolute;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: ${({ theme }) => theme.accent.primary}40;
+  z-index: 0;
+  font-family: 'Consolas', 'Monaco', monospace;
+  ${props => props.top && `top: ${props.top};`}
+  ${props => props.right && `right: ${props.right};`}
+  ${props => props.bottom && `bottom: ${props.bottom};`}
+  ${props => props.left && `left: ${props.left};`}
 `;
 
 export default Hero;
