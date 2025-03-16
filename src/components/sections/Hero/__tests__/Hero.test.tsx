@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import Hero from '../Hero';
-import { lightTheme } from '../../../../styles/ThemeProvider';
+import { darkTheme } from '../../../../styles/ThemeProvider';
 
 // Mock AnimatedSection
 jest.mock('../../../common/AnimatedSection', () => {
@@ -43,7 +43,7 @@ jest.mock('framer-motion', () => ({
 describe('Hero Component', () => {
   test('renders content correctly', () => {
     render(
-      <ThemeProvider theme={lightTheme}>
+      <ThemeProvider theme={darkTheme}>
         <Hero />
       </ThemeProvider>
     );
@@ -60,7 +60,7 @@ describe('Hero Component', () => {
 
   test('CTA buttons have correct href attributes', () => {
     render(
-      <ThemeProvider theme={lightTheme}>
+      <ThemeProvider theme={darkTheme}>
         <Hero />
       </ThemeProvider>
     );

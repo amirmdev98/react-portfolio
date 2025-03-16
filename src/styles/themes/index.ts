@@ -1,28 +1,5 @@
 import { Theme } from '../../interfaces/theme';
 
-export const lightTheme: Theme = {
-  name: 'light',
-  background: {
-    primary: '#ffffff',
-    secondary: '#f8f9fa',
-    card: '#ffffff'
-  },
-  text: {
-    primary: '#212529',
-    secondary: '#495057',
-    accent: '#0066cc'
-  },
-  accent: {
-    primary: '#0066cc',
-    secondary: '#0052a3',
-    tertiary: '#004080'
-  },
-  gradient: {
-    primary: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)',
-    glow: 'radial-gradient(circle, rgba(0, 102, 204, 0.15) 0%, rgba(0, 102, 204, 0) 70%)'
-  }
-};
-
 export const darkTheme: Theme = {
   name: 'dark',
   background: {
