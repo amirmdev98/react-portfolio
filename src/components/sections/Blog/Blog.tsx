@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { BlogCard } from './BlogCard';
 import { FilterTabs } from '../../common/FilterTabs';
-import { useAnimatedInView, staggerChildrenVariants } from '../../../hooks/useInView';
+import { staggerChildrenVariants, fadeInUpVariants } from '../../../hooks/useInView';
 import { BlogPost, BlogCategory } from '../../../interfaces/blog';
 
 const Section = styled.section`
@@ -142,22 +142,41 @@ const categories: BlogCategory[] = [
 
 const Blog = () => {
   const [activeCategory, setActiveCategory] = useState<BlogCategory>('all');
-  const { ref, controls } = useAnimatedInView();
   const [isLoading, setIsLoading] = useState(true);
+  const controls = useAnimation();
   
   // Simulate loading state for a more realistic experience
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
+      controls.start("visible");
     }, 800);
     
     return () => clearTimeout(timer);
-  }, []);
+  }, [controls]);
+
+  // Initialize animation when component mounts
+  useEffect(() => {
+    if (!isLoading) {
+      controls.start("visible");
+    }
+  }, [controls, isLoading]);
 
   // Filter posts based on selected category
-  const filteredPosts = samplePosts.filter(
-    post => activeCategory === 'all' || post.tags.includes(activeCategory)
-  );
+  const filteredPosts = activeCategory === 'all'
+    ? samplePosts
+    : samplePosts.filter(post => post.tags.includes(activeCategory));
+
+  // Handle category change with animation reset
+  const handleCategoryChange = (category: BlogCategory) => {
+    if (category !== activeCategory) {
+      controls.set("hidden");
+      setTimeout(() => {
+        setActiveCategory(category);
+        controls.start("visible");
+      }, 50);
+    }
+  };
 
   return (
     <Section id="blog">
@@ -173,7 +192,7 @@ const Blog = () => {
         <FilterTabs
           categories={categories}
           activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
+          onCategoryChange={handleCategoryChange}
         />
 
         {isLoading ? (
@@ -184,21 +203,24 @@ const Blog = () => {
           </LoadingGrid>
         ) : (
           <Grid
-            ref={ref}
             variants={staggerChildrenVariants}
             initial="hidden"
             animate={controls}
           >
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map(post => (
-                <BlogCard key={post.id} post={post} />
-              ))
-            ) : (
-              <EmptyState>
-                <h3>No posts found</h3>
-                <p>No posts matching the selected category were found. Try another category.</p>
-              </EmptyState>
-            )}
+            <AnimatePresence>
+              {filteredPosts.length > 0 ? (
+                filteredPosts.map(post => (
+                  <motion.div key={post.id} variants={fadeInUpVariants}>
+                    <BlogCard post={post} />
+                  </motion.div>
+                ))
+              ) : (
+                <EmptyState>
+                  <h3>No posts found</h3>
+                  <p>No posts matching the selected category were found. Try another category.</p>
+                </EmptyState>
+              )}
+            </AnimatePresence>
           </Grid>
         )}
       </Container>

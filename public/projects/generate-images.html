@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Image Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .controls {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        canvas {
+            display: block;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .imageContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .imageBox {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .imageBox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h1>Project Image Generator</h1>
+        <p>Generate stylish project name images for your portfolio</p>
+        
+        <div>
+            <label for="projectName">Project Name:</label>
+            <input type="text" id="projectName" placeholder="Enter project name">
+            
+            <label for="tagline">Tagline:</label>
+            <input type="text" id="tagline" placeholder="Enter tagline">
+            
+            <label for="gradient">Color Scheme:</label>
+            <select id="gradient">
+                <option value="blue">Blue Purple</option>
+                <option value="green">Green Teal</option>
+                <option value="red">Red Orange</option>
+                <option value="dark">Dark Theme</option>
+            </select>
+            
+            <button onclick="generateImage()">Generate Image</button>
+            <button onclick="downloadImage()">Download Image</button>
+        </div>
+    </div>
+    
+    <canvas id="canvas" width="1378" height="527"></canvas>
+    
+    <div class="imageContainer" id="generatedImages">
+        <!-- Generated images will appear here -->
+    </div>
+    
+    <script>
+        // Project data
+        const projects = [
+            { name: "Propision", tagline: "Business Proposal Platform" },
+            { name: "Metriland", tagline: "Real Estate Analytics" },
+            { name: "DaftarFile", tagline: "Document Management System" },
+            { name: "Tokenision", tagline: "Blockchain Token Platform" },
+            { name: "Sangyab", tagline: "E-commerce Solutions" }
+        ];
+        
+        // Color schemes
+        const gradients = {
+            blue: { start: "#2a2a72", end: "#470f80" },
+            green: { start: "#134e5e", end: "#71b280" },
+            red: { start: "#cb2d3e", end: "#ef473a" },
+            dark: { start: "#232526", end: "#414345" }
+        };
+        
+        // Canvas setup
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Generate image with the given parameters
+        function drawImage(projectName, tagline, gradientType) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            
+            // Set gradient
+            const colors = gradients[gradientType] || gradients.blue;
+            gradient.addColorStop(0, colors.start);
+            gradient.addColorStop(1, colors.end);
+            
+            // Draw background
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Add pattern overlay
+            ctx.save();
+            ctx.globalAlpha = 0.05;
+            for (let i = 0; i < width; i += 20) {
+                for (let j = 0; j < height; j += 20) {
+                    if ((i + j) % 40 === 0) {
+                        ctx.fillStyle = "#ffffff";
+                        ctx.fillRect(i, j, 10, 10);
+                    }
+                }
+            }
+            ctx.restore();
+            
+            // Add project name
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 80px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 5;
+            ctx.fillText(projectName, width/2, height/2 - 40);
+            
+            // Add tagline
+            ctx.font = "30px Arial";
+            ctx.shadowBlur = 10;
+            ctx.fillText(tagline, width/2, height/2 + 40);
+            
+            // Reset shadow
+            ctx.shadowColor = "transparent";
+            ctx.shadowBlur = 0;
+        }
+        
+        // Generate image from form inputs
+        function generateImage() {
+            const projectName = document.getElementById('projectName').value || "Project Name";
+            const tagline = document.getElementById('tagline').value || "Project Description";
+            const gradientType = document.getElementById('gradient').value;
+            
+            drawImage(projectName, tagline, gradientType);
+        }
+        
+        // Download the current canvas as a PNG image
+        function downloadImage() {
+            const projectName = document.getElementById('projectName').value || "project";
+            const link = document.createElement('a');
+            link.download = `name-${projectName.toLowerCase()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Generate all project images at once
+        function generateAllImages() {
+            const gradientTypes = Object.keys(gradients);
+            let index = 0;
+            
+            const container = document.getElementById('generatedImages');
+            
+            projects.forEach((project, i) => {
+                // Draw on canvas
+                drawImage(project.name, project.tagline, gradientTypes[i % gradientTypes.length]);
+                
+                // Create image element
+                const imgBox = document.createElement('div');
+                imgBox.className = 'imageBox';
+                
+                const img = document.createElement('img');
+                img.src = canvas.toDataURL('image/png');
+                
+                const caption = document.createElement('p');
+                caption.textContent = `${project.name} - ${project.tagline}`;
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = 'Download';
+                downloadBtn.onclick = function() {
+                    const link = document.createElement('a');
+                    link.download = `name-${project.name.toLowerCase()}.png`;
+                    link.href = img.src;
+                    link.click();
+                };
+                
+                imgBox.appendChild(img);
+                imgBox.appendChild(caption);
+                imgBox.appendChild(downloadBtn);
+                container.appendChild(imgBox);
+            });
+        }
+        
+        // Initial render
+        window.onload = function() {
+            drawImage("Project Name", "Your Project Tagline", "blue");
+            generateAllImages();
+        };
+    </script>
+</body>
+</html>
